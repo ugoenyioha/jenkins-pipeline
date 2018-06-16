@@ -23,6 +23,17 @@ def helmConfig() {
     sh "helm version"
 }
 
+def hadolintTest() {
+    // Test that hadolint works
+    println "checking hadolint"
+    sh "hadolint"
+}
+def lineageTest() {
+    // Test that lineage works
+    println "checking lineage"
+    sh "lineage help"
+}
+
 
 def helmDeploy(Map args) {
     //configure helm client and confirm tiller process is installed
@@ -45,7 +56,7 @@ def helmDeploy(Map args) {
         println "Running deployment"
 
         // reimplement --wait once it works reliable
-        sh "helm upgrade --install --force ${args.name} ${args.chart_dir} --set imageTag=${args.version_tag},replicas=${args.replicas},cpu=${args.cpu},memory=${args.memory},ingress.hostname=${args.hostname} --namespace=${namespace}"
+        sh "helm upgrade --install ${args.name} ${args.chart_dir} --set imageTag=${args.version_tag},replicas=${args.replicas},cpu=${args.cpu},memory=${args.memory},ingress.hostname=${args.hostname} --namespace=${namespace}"
 
         // sleeping until --wait works reliably
         sleep(20)
